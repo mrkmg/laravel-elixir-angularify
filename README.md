@@ -1,7 +1,7 @@
 Laravel Elixir Angularify
 ============================
 
-Current Version: 1.0.0
+Current Version: 1.0.1
 
 A Laravel Elixir mix to compile HTML into an Angular module to reduce the number of requests to a server to fetch html.
 
