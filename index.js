@@ -5,17 +5,19 @@
  * License: MIT
  */
 
-// Should exist already
 var Gulp = require('gulp');
 var Elixir = require('laravel-elixir');
 
-//
 var Print = require('gulp-print');
 var NgHtml2Js = require("gulp-ng-html2js");
 var MinifyHtml = require("gulp-minify-html");
 var Extend = require('extend');
 var Uglify = require("gulp-uglify");
 var Concat = require("gulp-concat");
+
+
+var $ = Elixir.Plugins;
+var config = Elixir.config;
 
 Elixir.extend('angularify', function (options)
 {
@@ -29,19 +31,20 @@ Elixir.extend('angularify', function (options)
 
     new Elixir.Task('angularify', function ()
     {
-        return Gulp.src(options.src + options.search)
+        return Gulp
+            .src(options.src + options.search)
             .pipe(Print())
-            .pipe(MinifyHtml({
+            .pipe($.if(config.production, MinifyHtml({
                 empty: true,
                 spare: true,
                 quotes: true
-            }))
+            })))
             .pipe(NgHtml2Js({
                 moduleName: options.moduleName,
                 prefix: options.prefix
             }))
             .pipe(Concat(options.moduleName + ".js"))
-            .pipe(Uglify())
+            .pipe($.if(config.production, Uglify()))
             .pipe(Gulp.dest(options.dest))
             .pipe(Print());
     }).watch([options.src + options.search]);
